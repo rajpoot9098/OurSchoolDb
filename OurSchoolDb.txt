@@ -1,0 +1,500 @@
+USE [master]
+GO
+
+/****** Object:  Database [OurSchool]    Script Date: 11-02-2022 10:15:56 AM ******/
+CREATE DATABASE [OurSchool]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'OurSchool', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\OurSchool.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'OurSchool_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\DATA\OurSchool_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT
+GO
+
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [OurSchool].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+
+ALTER DATABASE [OurSchool] SET ANSI_NULL_DEFAULT OFF 
+GO
+
+ALTER DATABASE [OurSchool] SET ANSI_NULLS OFF 
+GO
+
+ALTER DATABASE [OurSchool] SET ANSI_PADDING OFF 
+GO
+
+ALTER DATABASE [OurSchool] SET ANSI_WARNINGS OFF 
+GO
+
+ALTER DATABASE [OurSchool] SET ARITHABORT OFF 
+GO
+
+ALTER DATABASE [OurSchool] SET AUTO_CLOSE OFF 
+GO
+
+ALTER DATABASE [OurSchool] SET AUTO_SHRINK OFF 
+GO
+
+ALTER DATABASE [OurSchool] SET AUTO_UPDATE_STATISTICS ON 
+GO
+
+ALTER DATABASE [OurSchool] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+
+ALTER DATABASE [OurSchool] SET CURSOR_DEFAULT  GLOBAL 
+GO
+
+ALTER DATABASE [OurSchool] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+
+ALTER DATABASE [OurSchool] SET NUMERIC_ROUNDABORT OFF 
+GO
+
+ALTER DATABASE [OurSchool] SET QUOTED_IDENTIFIER OFF 
+GO
+
+ALTER DATABASE [OurSchool] SET RECURSIVE_TRIGGERS OFF 
+GO
+
+ALTER DATABASE [OurSchool] SET  DISABLE_BROKER 
+GO
+
+ALTER DATABASE [OurSchool] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+
+ALTER DATABASE [OurSchool] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+
+ALTER DATABASE [OurSchool] SET TRUSTWORTHY OFF 
+GO
+
+ALTER DATABASE [OurSchool] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+
+ALTER DATABASE [OurSchool] SET PARAMETERIZATION SIMPLE 
+GO
+
+ALTER DATABASE [OurSchool] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+
+ALTER DATABASE [OurSchool] SET HONOR_BROKER_PRIORITY OFF 
+GO
+
+ALTER DATABASE [OurSchool] SET RECOVERY FULL 
+GO
+
+ALTER DATABASE [OurSchool] SET  MULTI_USER 
+GO
+
+ALTER DATABASE [OurSchool] SET PAGE_VERIFY CHECKSUM  
+GO
+
+ALTER DATABASE [OurSchool] SET DB_CHAINING OFF 
+GO
+
+ALTER DATABASE [OurSchool] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+
+ALTER DATABASE [OurSchool] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+
+ALTER DATABASE [OurSchool] SET DELAYED_DURABILITY = DISABLED 
+GO
+
+ALTER DATABASE [OurSchool] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+
+ALTER DATABASE [OurSchool] SET QUERY_STORE = OFF
+GO
+
+ALTER DATABASE [OurSchool] SET  READ_WRITE 
+GO
+
+
+
+USE [OurSchool]
+GO
+/****** Object:  UserDefinedTableType [dbo].[TempOption]    Script Date: 11-02-2022 10:21:18 AM ******/
+CREATE TYPE [dbo].[TempOption] AS TABLE(
+	[QueId] [int] NULL,
+	[OptionCode] [varchar](50) NULL,
+	[OptionDesc] [varchar](50) NULL
+)
+GO
+/****** Object:  UserDefinedTableType [dbo].[TempStatusTbl]    Script Date: 11-02-2022 10:21:18 AM ******/
+CREATE TYPE [dbo].[TempStatusTbl] AS TABLE(
+	[CompanyId] [numeric](18, 0) NULL,
+	[CompanyName] [varchar](50) NULL,
+	[ProductId] [int] NULL,
+	[ProductName] [varchar](50) NULL,
+	[StatusId] [int] NULL,
+	[StatusDesc] [varchar](50) NULL,
+	[ContactThrough] [varchar](50) NULL,
+	[ContactWith] [varchar](50) NULL,
+	[ContactDate] [date] NULL,
+	[Remark] [varchar](1000) NULL
+)
+GO
+/****** Object:  Table [dbo].[MstCompanyMaster]    Script Date: 11-02-2022 10:21:18 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[MstCompanyMaster](
+	[CompanyCode] [int] IDENTITY(1,1) NOT NULL,
+	[CompanyCodeOdp] [int] NULL,
+	[CompanyName] [varchar](75) NULL,
+	[ImageNameMotor] [varchar](255) NULL,
+	[Address] [varchar](150) NULL,
+	[ContPersonName1] [varchar](75) NULL,
+	[ContPersonMob1] [varchar](10) NULL,
+	[ContPersonEmailId1] [varchar](75) NULL,
+	[ContPersonName2] [varchar](75) NULL,
+	[ContPersonMob2] [varchar](10) NULL,
+	[ContPersonEmailId2] [varchar](75) NULL,
+	[ContPersonName3] [varchar](75) NULL,
+	[ContPersonMob3] [varchar](10) NULL,
+	[ContPersonEmailId3] [varchar](75) NULL,
+	[OfficicalLandLine] [varchar](15) NULL,
+	[OfficicalEmail] [varchar](75) NULL,
+	[CompanyLogo] [nvarchar](max) NULL,
+	[CompanyLogoBike] [nvarchar](max) NULL,
+	[NetworkHospitalsURL] [nvarchar](500) NULL,
+	[GarageLinkForVehicle] [nvarchar](500) NULL,
+	[EntryDate] [date] NULL,
+	[EntryTime] [time](7) NULL,
+ CONSTRAINT [PK_MstCompanyMaster] PRIMARY KEY CLUSTERED 
+(
+	[CompanyCode] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[MstOption]    Script Date: 11-02-2022 10:21:18 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[MstOption](
+	[OptionId] [int] IDENTITY(1,1) NOT NULL,
+	[QueId] [int] NULL,
+	[OptionCode] [varchar](50) NULL,
+	[OptionDesc] [varchar](50) NULL,
+ CONSTRAINT [PK_MstOption] PRIMARY KEY CLUSTERED 
+(
+	[OptionId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[MstOptionType]    Script Date: 11-02-2022 10:21:18 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[MstOptionType](
+	[OptionTypeId] [int] IDENTITY(1,1) NOT NULL,
+	[OptionTypeDesc] [varchar](50) NULL,
+ CONSTRAINT [PK_MstOptionType] PRIMARY KEY CLUSTERED 
+(
+	[OptionTypeId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[MstProduct]    Script Date: 11-02-2022 10:21:18 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[MstProduct](
+	[ProductID] [int] IDENTITY(1,1) NOT NULL,
+	[ProductName] [varchar](50) NULL,
+ CONSTRAINT [PK_MstProduct] PRIMARY KEY CLUSTERED 
+(
+	[ProductID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[mstQuePaper]    Script Date: 11-02-2022 10:21:18 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[mstQuePaper](
+	[QueId] [int] IDENTITY(1,1) NOT NULL,
+	[QueNo] [varchar](50) NULL,
+	[QueDesc] [varchar](50) NULL,
+	[SubjectId] [int] NULL,
+	[SubjectName] [varchar](50) NULL,
+	[OptionTypeId] [int] NULL,
+	[OptionTypeDesc] [varchar](50) NULL,
+ CONSTRAINT [PK_mstQuePaper] PRIMARY KEY CLUSTERED 
+(
+	[QueId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[MstStatus]    Script Date: 11-02-2022 10:21:18 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[MstStatus](
+	[StatusId] [int] IDENTITY(1,1) NOT NULL,
+	[StatusDesc] [varchar](50) NULL,
+ CONSTRAINT [PK_MstStatus] PRIMARY KEY CLUSTERED 
+(
+	[StatusId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[MstSubject]    Script Date: 11-02-2022 10:21:18 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[MstSubject](
+	[SubjectId] [int] IDENTITY(1,1) NOT NULL,
+	[SubjectName] [varchar](50) NULL,
+ CONSTRAINT [PK_MstSubject] PRIMARY KEY CLUSTERED 
+(
+	[SubjectId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[ProductStatus]    Script Date: 11-02-2022 10:21:18 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[ProductStatus](
+	[RecordNo] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[EntryDate] [date] NULL,
+	[CompanyId] [numeric](18, 0) NULL,
+	[CompanyName] [varchar](50) NULL,
+	[ProductId] [int] NULL,
+	[ProductName] [varchar](50) NULL,
+	[StatusId] [int] NULL,
+	[StatusDesc] [varchar](50) NULL,
+	[ContactThrough] [varchar](50) NULL,
+	[ContactWith] [varchar](50) NULL,
+	[ContactDate] [date] NULL,
+	[Remark] [varchar](1000) NULL,
+ CONSTRAINT [PK_ProductStatus] PRIMARY KEY CLUSTERED 
+(
+	[RecordNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[T_Department]    Script Date: 11-02-2022 10:21:18 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[T_Department](
+	[DepartmentId] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[DepartmentName] [varchar](50) NULL,
+ CONSTRAINT [PK_T_Department] PRIMARY KEY CLUSTERED 
+(
+	[DepartmentId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[T_UserMst]    Script Date: 11-02-2022 10:21:18 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[T_UserMst](
+	[RecordNo] [numeric](18, 0) IDENTITY(1,1) NOT NULL,
+	[UserCode] [varchar](50) NULL,
+	[UserName] [varchar](50) NULL,
+	[DepartmentId] [numeric](18, 0) NULL,
+	[ContectNo] [numeric](10, 0) NULL,
+	[Password] [varchar](50) NULL,
+ CONSTRAINT [PK_T_UserMst] PRIMARY KEY CLUSTERED 
+(
+	[RecordNo] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  StoredProcedure [dbo].[SP_ProductStatus]    Script Date: 11-02-2022 10:21:18 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[SP_ProductStatus] 
+	@Ind int,
+	@UserCode varchar(50)='',
+	@UserName varchar(50)='',
+	@DepartmentId numeric(18,0)=0,
+	@ContectNo numeric(10,0)=0,
+	@Password varchar(50)='',
+	@TempTable TempStatusTbl READONLY
+AS
+BEGIN
+	IF(@Ind=1)
+	BEGIN
+
+	Select CompanyCode as CompanyId,CompanyName as CompanyName from MstCompanyMaster order by CompanyCode
+
+	Select ProductID,ProductName from MstProduct order by ProductID
+
+	Select StatusId,StatusDesc from MstStatus order by StatusId
+	END
+	ELSE IF(@Ind=2)
+	BEGIN
+	INSERT INTO ProductStatus
+	select cast(GETDATE() as date) as EntryDate,* from @TempTable;
+
+	select * from ProductStatus;
+	END
+	ELSE IF(@Ind=3)
+	BEGIN	
+	select RecordNo,convert(varchar, EntryDate, 101) as EntryDate,CompanyId,CompanyName,ProductId,ProductName,StatusId,StatusDesc,ContactThrough,
+	ContactWith,convert(varchar, ContactDate, 101) as ContactDate ,Remark from ProductStatus order by RecordNo;
+	END
+END
+GO
+/****** Object:  StoredProcedure [dbo].[SP_QuestionPaper]    Script Date: 11-02-2022 10:21:18 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[SP_QuestionPaper] 
+	@Ind int=0,
+	@QueId int=0,
+	@QueNo varchar(50)='',
+	@QueDesc varchar(50)='',
+	@SubjectId int=0,
+	@SubjectName varchar(50)='',
+	@OptionTypeId int=0,
+	@OptionTypeDesc varchar(50)='',
+	@TempOptionTable TempOption READONLY
+AS
+	DECLARE @MaxQueNo varchar(50)
+	DECLARE @MaxQueId int
+BEGIN
+	IF(@Ind=1)
+	BEGIN
+		select * from MstOptionType order by OptionTypeId;
+		Select * from MstSubject order by SubjectId;
+	END
+	ELSE IF(@Ind=2)
+	BEGIN
+		SET @MaxQueNo=(SELECT cast(@SubjectId as varchar(50))+'_'+ cast(COUNT(*)+1 as varchar(50)) FROM mstQuePaper WHERE SubjectId=@SubjectId);
+		insert into mstQuePaper values(@MaxQueNo,@QueDesc,@SubjectId,@SubjectName,@OptionTypeId,@OptionTypeDesc);
+
+		SET @MaxQueId=(SELECT MAX(QueId) FROM mstQuePaper);
+		insert into MstOption
+		select @MaxQueId as QueId,OptionCode,OptionDesc from @TempOptionTable;
+
+		select Que.QueId,Que.QueNo,Que.QueDesc,Que.SubjectId,Que.SubjectName,Que.OptionTypeId
+		,Que.OptionTypeDesc,
+		OpsA.OptionId AOptionId,OpsA.OptionCode AOptionCode,OpsA.OptionDesc AOptionDesc,
+		OpsB.OptionId BOptionId,OpsB.OptionCode BOptionCode,OpsB.OptionDesc BOptionDesc,
+		OpsC.OptionId COptionId,OpsC.OptionCode COptionCode,OpsC.OptionDesc COptionDesc,
+		OpsD.OptionId DOptionId,OpsD.OptionCode DOptionCode,OpsD.OptionDesc DOptionDesc
+		from mstQuePaper Que
+		JOIN MstOption OpsA on Que.QueId=OpsA.QueId and OpsA.OptionCode='A'
+		JOIN MstOption OpsB on Que.QueId=OpsB.QueId and OpsB.OptionCode='B'
+		JOIN MstOption OpsC on Que.QueId=OpsC.QueId and OpsC.OptionCode='C'
+		JOIN MstOption OpsD on Que.QueId=OpsD.QueId and OpsD.OptionCode='D';
+	END
+	ELSE IF(@Ind=3)
+	BEGIN
+		
+		Update mstQuePaper SET QueDesc=@QueDesc,SubjectId=@SubjectId,SubjectName=@SubjectName,OptionTypeId=@OptionTypeId,
+							   OptionTypeDesc=@OptionTypeDesc where QueId=@QueId;
+
+		delete from MstOption where QueId=@QueId;
+
+		insert into MstOption
+		select @QueId as QueId,OptionCode,OptionDesc from @TempOptionTable;
+
+		select Que.QueId,Que.QueNo,Que.QueDesc,Que.SubjectId,Que.SubjectName,Que.OptionTypeId
+		,Que.OptionTypeDesc,
+		OpsA.OptionId AOptionId,OpsA.OptionCode AOptionCode,OpsA.OptionDesc AOptionDesc,
+		OpsB.OptionId BOptionId,OpsB.OptionCode BOptionCode,OpsB.OptionDesc BOptionDesc,
+		OpsC.OptionId COptionId,OpsC.OptionCode COptionCode,OpsC.OptionDesc COptionDesc,
+		OpsD.OptionId DOptionId,OpsD.OptionCode DOptionCode,OpsD.OptionDesc DOptionDesc
+		from mstQuePaper Que
+		JOIN MstOption OpsA on Que.QueId=OpsA.QueId and OpsA.OptionCode='A'
+		JOIN MstOption OpsB on Que.QueId=OpsB.QueId and OpsB.OptionCode='B'
+		JOIN MstOption OpsC on Que.QueId=OpsC.QueId and OpsC.OptionCode='C'
+		JOIN MstOption OpsD on Que.QueId=OpsD.QueId and OpsD.OptionCode='D';
+	END
+	ELSE IF(@Ind=4)
+	BEGIN		
+		select Que.QueId,Que.QueNo,Que.QueDesc,Que.SubjectId,Que.SubjectName,Que.OptionTypeId
+		,Que.OptionTypeDesc,
+		OpsA.OptionId AOptionId,OpsA.OptionCode AOptionCode,OpsA.OptionDesc AOptionDesc,
+		OpsB.OptionId BOptionId,OpsB.OptionCode BOptionCode,OpsB.OptionDesc BOptionDesc,
+		OpsC.OptionId COptionId,OpsC.OptionCode COptionCode,OpsC.OptionDesc COptionDesc,
+		OpsD.OptionId DOptionId,OpsD.OptionCode DOptionCode,OpsD.OptionDesc DOptionDesc
+		from mstQuePaper Que
+		JOIN MstOption OpsA on Que.QueId=OpsA.QueId and OpsA.OptionCode='A'
+		JOIN MstOption OpsB on Que.QueId=OpsB.QueId and OpsB.OptionCode='B'
+		JOIN MstOption OpsC on Que.QueId=OpsC.QueId and OpsC.OptionCode='C'
+		JOIN MstOption OpsD on Que.QueId=OpsD.QueId and OpsD.OptionCode='D'
+		order by Que.SubjectId,Que.QueId;
+	END
+END
+GO
+/****** Object:  StoredProcedure [dbo].[SP_Registration]    Script Date: 11-02-2022 10:21:18 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE [dbo].[SP_Registration] 
+	@Ind int,
+	@UserCode varchar(50)='',
+	@UserName varchar(50)='',
+	@DepartmentId numeric(18,0)=0,
+	@ContectNo numeric(10,0)=0,
+	@Password varchar(50)=''
+AS
+BEGIN
+	IF(@Ind=1)
+	BEGIN
+	Select * from T_Department;
+	END
+	ELSE IF(@Ind=2)
+	BEGIN
+	INSERT INTO T_UserMst VALUES((select 'U'+cast((select count(*) from T_UserMst)+1 as varchar(50))),@UserName,@DepartmentId,@ContectNo,@Password)	
+	SELECT 1 SuccssCode;
+	END
+	ELSE IF(@Ind=3)
+	BEGIN
+	SELECT ROW_NUMBER() Over (Order by users.RecordNo) as SRNO,users.RecordNo, UserCode,UserName,users.DepartmentId,dpt.DepartmentName,ContectNo,Password 
+	from T_UserMst users
+	join T_Department dpt on users.DepartmentId=dpt.DepartmentId
+	order by users.RecordNo;
+	END
+	ELSE IF(@Ind=4)
+	BEGIN
+	SELECT users.RecordNo UserId, UserCode,UserName,users.DepartmentId,Password 
+	from T_UserMst users
+	where users.UserName=@UserName AND users.Password=@Password
+	order by users.RecordNo;
+	END
+END								 
+								 
+								 
+GO
